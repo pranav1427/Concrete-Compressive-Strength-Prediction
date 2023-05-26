@@ -1,6 +1,7 @@
 README.md
 setup.py
 concrete/__init__.py
+concrete/config.py
 concrete/exception.py
 concrete/logger.py
 concrete.egg-info/PKG-INFO
