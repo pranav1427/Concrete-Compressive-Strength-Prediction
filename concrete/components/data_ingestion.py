@@ -26,10 +26,20 @@ class DataIngestion:
                 database_name=self.data_ingestion_config.database_name,
                 collection_name=self.data_ingestion_config.collection_name)
 
-            logging.info(f"save dataset in feature store folder")
+            logging.info(f"Replacing na with NAN")
             #save dataset in feature store folder
             df.replace(to_replace="na",value=np.NAN, inplace=True)
 
+            logging.info(f"Removing outlier from dataset before splitting dataset into train test split")
+            #Removing outlier from dataset
+            for col_name in df[:-1]:
+                q1 = df[col_name].quantile(0.25)
+                q3 = df[col_name].quantile(0.75)
+                iqr = q3 - q1
+    
+                low = q1-1.5*iqr
+                high = q3+1.5*iqr
+                df.loc[(df[col_name] < low) | (df[col_name] > high), col_name] = df[col_name].median()
             logging.info(f"create feature store folder")
             #create feature store folder
             feature_store_dir=os.path.dirname(self.data_ingestion_config.feature_store_file_path)
