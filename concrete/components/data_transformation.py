@@ -3,7 +3,7 @@ from concrete.exception import ConcreteException
 from concrete.logger import logging 
 from typing import Optional
 import os, sys
-from sklearn.preprocessing import Pipeline
+from sklearn.pipeline import Pipeline
 import pandas as pd 
 from concrete import utils
 import numpy as np 
@@ -59,12 +59,11 @@ class DataTransformation:
             input_feature_train_arr=transformation_pipeline.transform(input_feature_train_df)
             input_feature_test_arr=transformation_pipeline.transform(input_feature_test_df)
 
-            Target_scaler = StandardScaler()
-            Target_scaler.fit(target_feature_train_df)
+            
             
             #transformation on target columns
-            target_feature_train_arr = scaler.transform(target_feature_train_df)
-            target_feature_test_arr = scaler.transform(target_feature_test_df)
+            target_feature_train_arr = (target_feature_train_df).values.reshape(-1, 1)
+            target_feature_test_arr = (target_feature_test_df).values.reshape(-1, 1)
 
             train_arr=np.c_[input_feature_train_arr,target_feature_train_arr]
             test_arr=np.c_[input_feature_test_arr,target_feature_test_arr]
@@ -74,7 +73,7 @@ class DataTransformation:
             utils.save_numpy_array_data(file_path=self.data_transformation_config.transformed_test_path, array=test_arr)
         
             utils.save_object(file_path=self.data_transformation_config.transform_object_path, obj=transformation_pipeline)
-            utils.save_object(file_path=self.data_transformation_config.target_scaler_path, obj=Target_scaler)
+            utils.save_object(file_path=self.data_transformation_config.target_scaler_path, obj=None)
 
             data_transformation_artifact=artifact_entity.DataTransformationArtifact(
                 transform_object_path=self.data_transformation_config.transform_object_path,

@@ -1,7 +1,0 @@
-[ 2023-05-25 19:35:48,199 ] 9 root - INFO - Reading data from database :concrete_data and collection name concrete_strength
-[ 2023-05-25 19:35:48,210 ] 11 root - INFO - Found columns: Index(['_id', 'cement', 'blast_furnace_slag', 'fly_ash', 'water',
-       'superplasticizer', 'coarse_aggregate', 'fine_aggregate ', 'age',
-       'concrete_compressive_strength'],
-      dtype='object')
-[ 2023-05-25 19:35:48,210 ] 13 root - INFO - Dropping column : _id
-[ 2023-05-25 19:35:48,211 ] 15 root - INFO - rows and col in df:(1030, 9)

@@ -19,7 +19,11 @@ class DataTransformationArtifact:
     target_scaler_path:str
 
 
+@dataclass
+class ModelTrainerArtifact:
+    model_path:str
+    r2_train_score:float
+    r2_test_score:float
 
-class ModelTrainerArtifact:...
 class ModelEvaluationArtifact:...
 class ModelPusherArtifact:...
