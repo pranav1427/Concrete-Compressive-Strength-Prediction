@@ -18,6 +18,7 @@ class DataTransformation:
                     data_ingestion_artifact:artifact_entity.DataIngestionArtifact):
         
         try:
+            logging.info(f"{'>>'*20} Data Transformation {'<<'*20}")
             self.data_transformation_config=data_transformation_config
             self.data_ingestion_artifact=data_ingestion_artifact
         except Exception as e:
@@ -59,7 +60,8 @@ class DataTransformation:
             input_feature_train_arr=transformation_pipeline.transform(input_feature_train_df)
             input_feature_test_arr=transformation_pipeline.transform(input_feature_test_df)
 
-            
+            target_scaler=StandardScaler()
+            target_scaler.fit((target_feature_train_df).values.reshape(-1, 1))
             
             #transformation on target columns
             target_feature_train_arr = (target_feature_train_df).values.reshape(-1, 1)
@@ -73,7 +75,7 @@ class DataTransformation:
             utils.save_numpy_array_data(file_path=self.data_transformation_config.transformed_test_path, array=test_arr)
         
             utils.save_object(file_path=self.data_transformation_config.transform_object_path, obj=transformation_pipeline)
-            utils.save_object(file_path=self.data_transformation_config.target_scaler_path, obj=None)
+            utils.save_object(file_path=self.data_transformation_config.target_scaler_path, obj=target_scaler)
 
             data_transformation_artifact=artifact_entity.DataTransformationArtifact(
                 transform_object_path=self.data_transformation_config.transform_object_path,

@@ -4,6 +4,7 @@ concrete/__init__.py
 concrete/config.py
 concrete/exception.py
 concrete/logger.py
+concrete/predictor.py
 concrete/utils.py
 concrete.egg-info/PKG-INFO
 concrete.egg-info/SOURCES.txt
