@@ -59,23 +59,17 @@ class DataTransformation:
             #transforming input feature
             input_feature_train_arr=transformation_pipeline.transform(input_feature_train_df)
             input_feature_test_arr=transformation_pipeline.transform(input_feature_test_df)
-
-            target_scaler=StandardScaler()
-            target_scaler.fit((target_feature_train_df).values.reshape(-1, 1))
             
-            #transformation on target columns
-            target_feature_train_arr = (target_feature_train_df).values.reshape(-1, 1)
-            target_feature_test_arr = (target_feature_test_df).values.reshape(-1, 1)
+            
 
-            train_arr=np.c_[input_feature_train_arr,target_feature_train_arr]
-            test_arr=np.c_[input_feature_test_arr,target_feature_test_arr]
+            train_arr=np.c_[input_feature_train_arr,np.array(target_feature_train_df)]
+            test_arr=np.c_[input_feature_test_arr,np.array(target_feature_test_df)]
 
             #save numpy array
             utils.save_numpy_array_data(file_path=self.data_transformation_config.transformed_train_path, array=train_arr)
             utils.save_numpy_array_data(file_path=self.data_transformation_config.transformed_test_path, array=test_arr)
         
             utils.save_object(file_path=self.data_transformation_config.transform_object_path, obj=transformation_pipeline)
-            utils.save_object(file_path=self.data_transformation_config.target_scaler_path, obj=target_scaler)
 
             data_transformation_artifact=artifact_entity.DataTransformationArtifact(
                 transform_object_path=self.data_transformation_config.transform_object_path,

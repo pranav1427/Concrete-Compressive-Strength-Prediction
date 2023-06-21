@@ -6,7 +6,8 @@ from concrete.utils import load_object
 from sklearn.metrics import r2_score
 import pandas as pd
 import os, sys
-from concrete.config import TARGET_COLUMN 
+from concrete.config import TARGET_COLUMN
+import numpy as np 
 
 
 
@@ -42,30 +43,32 @@ class ModelEvaluation:
             logging.info(f"finding location of transformer , model and target scaler")
             transformer_path=self.model_resolver.get_latest_transformer_path()
             model_path=self.model_resolver.get_latest_model_path()
-            target_scaler_path=self.model_resolver.get_latest_target_scaler_path()
+            
+            
 
             logging.info(f"previously trained objects of transformer , model and target scaler")
             #previously trained objects
             transformer=load_object(file_path=transformer_path)
             model= load_object(file_path=model_path)
-            target_scaler=load_object(file_path=target_scaler_path)
+            
 
             logging.info(f"currently trained objects of transformer , model and target scaler")
             #currently trained model objects
             current_transformer=load_object(file_path=self.data_transformation_artifact.transform_object_path)
             current_model=load_object(file_path=self.model_trainer_artifact.model_path)
-            current_target_scaler=load_object(file_path=self.data_transformation_artifact.target_scaler_path)
+            
 
             test_df=pd.read_csv(self.data_ingestion_artifact.test_file_path)
             target_df= test_df[TARGET_COLUMN]
-            y_true=target_scaler.transform((target_df).values.reshape(-1, 1))
+            y_true=(target_df)
             #accuracy using previous trained model
             logging.info(f"accuracy using previous trained model")
 
             input_feature_name=list(transformer.feature_names_in_)
             input_arr=transformer.transform(test_df[input_feature_name])
             y_pred=model.predict(input_arr)
-            print(f"prediction using previous model: {target_scaler.inverse_transform(y_pred[:5])}")
+            
+            print(f"prediction using previous model: {(y_pred[:5])}")
             previous_model_score=r2_score(y_true=y_true,y_pred=y_pred)
             logging.info(f"accuracy using previous trained model:{previous_model_score}")
             
@@ -73,12 +76,13 @@ class ModelEvaluation:
             input_feature_name=list(current_transformer.feature_names_in_)
             input_arr=current_transformer.transform(test_df[input_feature_name])
             y_pred=current_model.predict(input_arr)
-            y_true=current_target_scaler.transform((target_df).values.reshape(-1, 1))
-            print(f"prediction using trained model: {target_scaler.inverse_transform(y_pred[:5])}")
+            y_true=(target_df)
+            
+            print(f"prediction using trained model: {(y_pred[:5])}")
             current_model_score=r2_score(y_true=y_true,y_pred=y_pred)
             logging.info(f"accuracy using current trained model:{current_model_score}")
 
-            if current_model_score<previous_model_score:
+            if current_model_score<=previous_model_score:
                 logging.info(f"current trained model is not better than previous trained model")
                 raise Exception("current trained model is not better than previous trained model")
 

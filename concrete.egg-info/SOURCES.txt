@@ -22,4 +22,5 @@ concrete/entity/__init__.py
 concrete/entity/artifact_entity.py
 concrete/entity/config_entity.py
 concrete/pipeline/__init__.py
+concrete/pipeline/batch_prediction.py
 concrete/pipeline/training_pipeline.py

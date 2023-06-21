@@ -26,27 +26,27 @@ class ModelPusher:
             logging.info(f"loading transformer , model and target scaler path")
             transformer=load_object(file_path=self.data_transformation_artifact.transform_object_path)
             model= load_object(file_path=self.model_trainer_artifact.model_path)
-            target_scaler=load_object(file_path=self.data_transformation_artifact.target_scaler_path)
+            
 
 
             #model pusher dir
             logging.info(f"saving model into model pusher dir")
             save_object(file_path=self.model_pusher_config.pusher_transformer_path, obj=transformer)
             save_object(file_path=self.model_pusher_config.pusher_model_path, obj=model)
-            save_object(file_path=self.model_pusher_config.pusher_target_scaler_path, obj=target_scaler)
+            
 
 
             #saved model dir
             logging.info(f"saving model into saved model  dir")
             transformer_path=self.model_resolver.get_latest_save_transformer_path()
             model_path=self.model_resolver.get_latest_save_model_path()
-            target_scaler_path=self.model_resolver.get_latest_save_target_scaler_path()
+            
 
 
 
             save_object(file_path=transformer_path, obj=transformer)
             save_object(file_path=model_path, obj=model)
-            save_object(file_path=target_scaler_path, obj=target_scaler)
+            
 
 
             model_pusher_artifact=ModelPusherArtifact(push_model_dir=self.model_pusher_config.pusher_model_dir,
