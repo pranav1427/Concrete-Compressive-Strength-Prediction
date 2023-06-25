@@ -1,8 +1,9 @@
 import pymongo
 import pandas as pd
 import json
-# Provide the mongodb localhost url to connect python to mongodb.
-client = pymongo.MongoClient("mongodb://localhost:27017/neurolabDB")
+from concrete.config import mongo_client
+
+
 
 DATA_FILE_PATH="/config/workspace/concrete_data.csv"
 DATABASE_NAME="concrete_data"
@@ -20,4 +21,4 @@ if __name__=="__main__":
     print(json_record[0])
 
     #inserting converted json record to mongo db
-    client[DATABASE_NAME][COLLECTION_NAME].insert_many(json_record)
+    mongo_client[DATABASE_NAME][COLLECTION_NAME].insert_many(json_record)
