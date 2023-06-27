@@ -17,6 +17,7 @@ if __name__=="__main__":
     #converting dataframe to json to dump record in mongo db
     df.reset_index(drop=True,inplace=True)
 
+
     json_record= list(json.loads(df.T.to_json()).values())
     print(json_record[0])
 
