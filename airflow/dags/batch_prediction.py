@@ -8,7 +8,7 @@ from airflow.operators.python import PythonOperator
 
 
 with DAG(
-    'concrete_training',
+    'batch_prediction',
     default_args={'retries': 2},
     # [END default_args]
     description='Concrete strength',
@@ -18,7 +18,6 @@ with DAG(
     tags=['example'],
 ) as dag:
 
-    
     def download_files(**kwargs):
         bucket_name = os.getenv("BUCKET_NAME")
         input_dir = "/app/input_files"
@@ -27,7 +26,7 @@ with DAG(
         os.system(f"aws s3 sync s3://{bucket_name}/input_files /app/input_files")
 
     def batch_prediction(**kwargs):
-        from sensor.pipeline.batch_prediction import start_batch_prediction
+        from concrete.pipeline.batch_prediction import start_batch_prediction
         input_dir = "/app/input_files"
         for file_name in os.listdir(input_dir):
             #make prediction
@@ -58,4 +57,3 @@ with DAG(
     )
 
     download_input_files >> generate_prediction_files >> upload_prediction_files
-     
